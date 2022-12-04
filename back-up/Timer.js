@@ -6,5 +6,5 @@ export default function Timer({ style, timer, setGameOver }) {
     setGameOver(true);
   }
 
-  return <Text style={style}>{timer}</Text>;
+  return <Text style={style}>{timer.toFixed(2)}</Text>;
 }

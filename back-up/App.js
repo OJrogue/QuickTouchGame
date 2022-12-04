@@ -7,10 +7,8 @@ import GameOver from './GameOver';
 
 export default function App() {
   const SIZE = 50;
-  const DEFAULT_TIME = 10000;
-  let time = Date.now() + DEFAULT_TIME;
-  const TIME_INCRESEMENT = 50000;
-  // Date.now + 10000 - Date.now
+  const TIME = 10;
+  const TIME_INCRESEMENT = 1;
 
   const maxHeight = Dimensions.get('window').height - SIZE;
   const maxWidth = Dimensions.get('window').width - SIZE;
@@ -20,32 +18,28 @@ export default function App() {
 
   const [score, setScore] = useState(0);
 
-  const [timer, setTimer] = useState(DEFAULT_TIME);
+  const [timer, setTimer] = useState(TIME);
   const [gameOver, setGameOver] = useState(true);
 
   function touched() {
     setTop(Math.floor(Math.random() * maxHeight));
     setLeft(Math.floor(Math.random() * maxWidth));
     setScore(score + 1);
-    // setTimer((prevTimer) => prevTimer + TIME_INCRESEMENT);
-    time = time + TIME_INCRESEMENT;
-    console.log(time);
+    setTimer((prevTimer) => prevTimer + TIME_INCRESEMENT);
 
     console.log(score);
   }
 
   function resetGame() {
-    time = Date.now() + DEFAULT_TIME;
-    setTimer(DEFAULT_TIME);
+    setTimer(TIME);
     setGameOver(false);
     setScore(0);
   }
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimer(time - Date.now());
-      console.log(time);
-    }, 0);
+      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : prevTimer));
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
