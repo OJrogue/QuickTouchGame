@@ -7,6 +7,8 @@ import GameOver from './GameOver';
 
 export default function App() {
   const SIZE = 50;
+  const TIME = 10;
+  const TIME_INCRESEMENT = 1;
 
   const maxHeight = Dimensions.get('window').height - SIZE;
   const maxWidth = Dimensions.get('window').width - SIZE;
@@ -16,22 +18,31 @@ export default function App() {
 
   const [score, setScore] = useState(0);
 
-  const [timer, setTimer] = useState(1000);
-  const [gameOver, setGameOver] = useState(false);
+  const [timer, setTimer] = useState(TIME);
+  const [gameOver, setGameOver] = useState(true);
 
   function touched() {
     setTop(Math.floor(Math.random() * maxHeight));
     setLeft(Math.floor(Math.random() * maxWidth));
     setScore(score + 1);
-    setTimer(timer + 10);
+    setTimer((prevTimer) => prevTimer + TIME_INCRESEMENT);
+
     console.log(score);
   }
 
   function resetGame() {
-    setTimer(100);
+    setTimer(TIME);
     setGameOver(false);
     setScore(0);
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : prevTimer));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -51,10 +62,10 @@ export default function App() {
       <View style={styles.timerContainer}>
         {/* <Text style={styles.timer}>{timer}</Text> */}
         <Timer
-          timer={timer}
           setTimer={setTimer}
-          setGameOver={setGameOver}
           style={styles.timer}
+          timer={timer}
+          setGameOver={setGameOver}
         />
       </View>
       <GameOver score={score} resetGame={resetGame} visibility={gameOver} />
