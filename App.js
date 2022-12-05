@@ -9,7 +9,7 @@ export default function App() {
   const SIZE = 50;
   const DEFAULT_TIME = 10000;
   let time = Date.now() + DEFAULT_TIME;
-  const TIME_INCRESEMENT = 50000;
+  const TIME_INCRESEMENT = 1;
   // Date.now + 10000 - Date.now
 
   const maxHeight = Dimensions.get('window').height - SIZE;
@@ -20,7 +20,10 @@ export default function App() {
 
   const [score, setScore] = useState(0);
 
+  // const [timer, setTimer] = useState(DEFAULT_TIME);
   const [timer, setTimer] = useState(DEFAULT_TIME);
+  // const [time, setTime] = useState(Date.now() + DEFAULT_TIME);
+
   const [gameOver, setGameOver] = useState(true);
 
   function touched() {
@@ -28,23 +31,36 @@ export default function App() {
     setLeft(Math.floor(Math.random() * maxWidth));
     setScore(score + 1);
     // setTimer((prevTimer) => prevTimer + TIME_INCRESEMENT);
+    // setTime((time) => time + TIME_INCRESEMENT);
     time = time + TIME_INCRESEMENT;
     console.log(time);
+    console.log('/////');
 
     console.log(score);
   }
 
   function resetGame() {
-    time = Date.now() + DEFAULT_TIME;
     setTimer(DEFAULT_TIME);
     setGameOver(false);
     setScore(0);
   }
 
+  function getTime() {
+    console.log(time);
+    return time;
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimer(time - Date.now());
-      console.log(time);
+      setTimer((prevTimer) => {
+        time = getTime();
+        const newTime = time - Date.now();
+        if (newTime > 0) {
+          return newTime;
+        }
+        clearInterval(interval);
+        return 0;
+      });
     }, 0);
 
     return () => clearInterval(interval);

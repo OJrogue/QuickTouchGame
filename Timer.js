@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 
 export default function Timer({ style, timer, setGameOver }) {
   if (timer <= 0) {
-    setGameOver(true);
+    // setGameOver(true);
   }
 
   return <Text style={style}>{timer}</Text>;
