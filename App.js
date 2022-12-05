@@ -8,8 +8,8 @@ import GameOver from './GameOver';
 export default function App() {
   const SIZE = 50;
   const DEFAULT_TIME = 10000;
-  let time = Date.now() + DEFAULT_TIME;
-  const TIME_INCRESEMENT = 1;
+  // let time = Date.now() + DEFAULT_TIME;
+  const TIME_INCRESEMENT = 500;
   // Date.now + 10000 - Date.now
 
   const maxHeight = Dimensions.get('window').height - SIZE;
@@ -21,46 +21,43 @@ export default function App() {
   const [score, setScore] = useState(0);
 
   // const [timer, setTimer] = useState(DEFAULT_TIME);
-  const [timer, setTimer] = useState(DEFAULT_TIME);
-  // const [time, setTime] = useState(Date.now() + DEFAULT_TIME);
+  const [timer, setTimer] = useState(Date.now() + DEFAULT_TIME);
 
   const [gameOver, setGameOver] = useState(true);
+
+  const [rerend, setRerend] = useState(0);
+  function rerender() {
+    setRerend((rend) => rend + 1);
+  }
 
   function touched() {
     setTop(Math.floor(Math.random() * maxHeight));
     setLeft(Math.floor(Math.random() * maxWidth));
     setScore(score + 1);
-    // setTimer((prevTimer) => prevTimer + TIME_INCRESEMENT);
+    setTimer((prevTimer) => prevTimer + TIME_INCRESEMENT);
     // setTime((time) => time + TIME_INCRESEMENT);
-    time = time + TIME_INCRESEMENT;
-    console.log(time);
-    console.log('/////');
 
     console.log(score);
   }
 
   function resetGame() {
-    setTimer(DEFAULT_TIME);
+    setTimer(Date.now() + DEFAULT_TIME);
     setGameOver(false);
     setScore(0);
-  }
-
-  function getTime() {
-    console.log(time);
-    return time;
+    rerender();
   }
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimer((prevTimer) => {
-        time = getTime();
-        const newTime = time - Date.now();
-        if (newTime > 0) {
-          return newTime;
-        }
-        clearInterval(interval);
-        return 0;
-      });
+      // setTimer((prevTimer) => {
+      //   const newTime = prevTimer - Date.now();
+      //   if (newTime > 0) {
+      //     return prevTimer;
+      //   }
+      //   clearInterval(interval);
+      //   return prevTimer;
+      // });
+      rerender();
     }, 0);
 
     return () => clearInterval(interval);
