@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Button, Pressable } from 'react-native';
 import { Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
 import Timer from './Timer';
@@ -8,7 +8,9 @@ import GameOver from './GameOver';
 export default function App() {
   const SIZE = 50;
   const DEFAULT_TIME = 10000;
+  // let time = Date.now() + DEFAULT_TIME;
   const TIME_INCRESEMENT = 500;
+  // Date.now + 10000 - Date.now
 
   const maxHeight = Dimensions.get('window').height - SIZE;
   const maxWidth = Dimensions.get('window').width - SIZE;
@@ -18,11 +20,11 @@ export default function App() {
 
   const [score, setScore] = useState(0);
 
+  // const [timer, setTimer] = useState(DEFAULT_TIME);
   const [timer, setTimer] = useState(Date.now() + DEFAULT_TIME);
 
   const [gameOver, setGameOver] = useState(true);
 
-  // rerender
   const [rerend, setRerend] = useState(0);
   function rerender() {
     setRerend((rend) => rend + 1);
@@ -33,6 +35,7 @@ export default function App() {
     setLeft(Math.floor(Math.random() * maxWidth));
     setScore(score + 1);
     setTimer((prevTimer) => prevTimer + TIME_INCRESEMENT);
+    // setTime((time) => time + TIME_INCRESEMENT);
 
     console.log(score);
   }
@@ -46,8 +49,16 @@ export default function App() {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      // setTimer((prevTimer) => {
+      //   const newTime = prevTimer - Date.now();
+      //   if (newTime > 0) {
+      //     return prevTimer;
+      //   }
+      //   clearInterval(interval);
+      //   return prevTimer;
+      // });
       rerender();
-    }, 1);
+    }, 0);
 
     return () => clearInterval(interval);
   }, []);
@@ -68,7 +79,13 @@ export default function App() {
         ></View>
       </Pressable>
       <View style={styles.timerContainer}>
-        <Timer style={styles.timer} timer={timer} setGameOver={setGameOver} />
+        {/* <Text style={styles.timer}>{timer}</Text> */}
+        <Timer
+          setTimer={setTimer}
+          style={styles.timer}
+          timer={timer}
+          setGameOver={setGameOver}
+        />
       </View>
       <GameOver score={score} resetGame={resetGame} visibility={gameOver} />
       <StatusBar hidden />
